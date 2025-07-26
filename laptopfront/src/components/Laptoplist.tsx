@@ -5,26 +5,15 @@ import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import Snackbar from '@mui/material/Snackbar';
 import AddLaptop from './AddLaptop';
 import EditLaptop from './EditLaptop';
-// MUI Button
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-function LaptopList() 
-{
+function LaptopList() {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
-  const { data, isError, isLoading, isSuccess } = useQuery({
-    queryKey: ["laptops"],
-    queryFn: getLaptops
-  });
+  const { data, isError, isLoading, isSuccess } = useQuery({ queryKey: ["laptops"], queryFn: getLaptops});
   const { mutate } = useMutation(deleteLaptop, {
-    onSuccess: () => {
-      setOpen(true);
-      queryClient.invalidateQueries({ queryKey: ['laptops'] });
-    },
-    onError: (err) => {
-      console.error(err);
-    },
-  });
+    onSuccess: () => { setOpen(true); queryClient.invalidateQueries({ queryKey: ['laptops'] });},
+    onError: (err) => { console.error(err);},});
   const columns: GridColDef[] = [
     { field: 'brand', headerName: 'Brand', width: 200 },
     { field: 'model', headerName: 'Model', width: 200 },
@@ -42,7 +31,6 @@ function LaptopList()
       renderCell: (params: GridCellParams) =>
         <EditLaptop laptopData={params.row} />
     },
-    // MUI Button
      {
       field: 'delete',
       headerName: '',
@@ -63,7 +51,6 @@ function LaptopList()
       ),
     }
   ];
-
   if (isLoading) {
     return <span>Loading...</span>
   }
