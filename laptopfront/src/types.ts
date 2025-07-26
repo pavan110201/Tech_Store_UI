@@ -34,6 +34,5 @@ price: number;
 export type LaptopEntry = 
 {
 laptop: Laptop;
-Laptop: Laptop;
 url: string;
 }

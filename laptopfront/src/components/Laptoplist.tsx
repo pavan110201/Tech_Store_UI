@@ -1,4 +1,3 @@
-// delete functionality with pop up message, add car functionality, edit car, exporting csv files
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getLaptops, deleteLaptop } from '../api/laptopapi';
@@ -6,6 +5,9 @@ import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import Snackbar from '@mui/material/Snackbar';
 import AddLaptop from './AddLaptop';
 import EditLaptop from './EditLaptop';
+// MUI Button
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 function LaptopList() 
 {
   const [open, setOpen] = useState(false);
@@ -14,7 +16,6 @@ function LaptopList()
     queryKey: ["laptops"],
     queryFn: getLaptops
   });
-
   const { mutate } = useMutation(deleteLaptop, {
     onSuccess: () => {
       setOpen(true);
@@ -24,7 +25,6 @@ function LaptopList()
       console.error(err);
     },
   });
-
   const columns: GridColDef[] = [
     { field: 'brand', headerName: 'Brand', width: 200 },
     { field: 'model', headerName: 'Model', width: 200 },
@@ -42,8 +42,8 @@ function LaptopList()
       renderCell: (params: GridCellParams) =>
         <EditLaptop laptopData={params.row} />
     },
-    {
-
+    // MUI Button
+     {
       field: 'delete',
       headerName: '',
       width: 90,
@@ -51,16 +51,17 @@ function LaptopList()
       filterable: false,
       disableColumnMenu: true,
       renderCell: (params: GridCellParams) => (
-      <button onClick={() => 
-       {
-          if (window.confirm(`Are you sure you want to delete ${params.row.brand} ${params.row.model}?`)) {
-            mutate(params.row._links.laptop.href);
-          }
-        }}>
-          Delete
-          </button>
+        <IconButton aria-label="delete" size="small"
+          onClick={() => {
+            if (window.confirm(`Are you sure you want to delete ${params.row.brand} ${params.row.model}?`)) {
+              mutate(params.row._links.laptop.href);
+            } 
+          }}       
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
       ),
-    },
+    }
   ];
 
   if (isLoading) {
@@ -78,7 +79,7 @@ function LaptopList()
           columns={columns}
           disableRowSelectionOnClick={true}
           getRowId={row => row._links.self.href}
-           showToolbar={true}
+          showToolbar={true}
         />
         <Snackbar
           open={open}

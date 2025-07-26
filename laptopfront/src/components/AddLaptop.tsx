@@ -6,12 +6,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import LaptopDialogContent from './LaptopDialogContent';
 import { Laptop } from '../types';
-function AddLaptop() 
-{
+// MUI Button
+import Button from '@mui/material/Button';
+function AddLaptop() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [laptop, setLaptop] = useState<Laptop>
-  ({
+  const [laptop, setLaptop] = useState<Laptop>({
     brand: '',
     model: '',
     color: '',
@@ -19,44 +19,41 @@ function AddLaptop()
     modelYear: 0,
     price: 0
   });
-  const { mutate } = useMutation(addLaptop, 
-    { onSuccess: () => { queryClient.invalidateQueries(["laptops"]);},
-    onError: (err) => 
-      {
-       console.error(err);
-      },
+  const { mutate } = useMutation(addLaptop, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["laptops"]);
+    },
+    onError: (err) => {
+      console.error(err);
+    },
   });
-  const handleClickOpen = () => 
-  {
+
+  const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => 
-  {
+  const handleClose = () => {
     setOpen(false);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => 
-  {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLaptop({ ...laptop, [event.target.name]: event.target.value });
   }
 
-  const handleSave = () => 
-  {
+  const handleSave = () => {
     mutate(laptop);
     setLaptop({ brand: '', model: '', color: '', serialNumber: '', modelYear: 0, price: 0 });
     handleClose();
   }
-
-  return (
+return(
     <>
-      <button onClick={handleClickOpen}>New Laptop</button>
+      <Button onClick={handleClickOpen}>New Laptop</Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New Laptop</DialogTitle>
-        <LaptopDialogContent laptop={laptop} handleChange={handleChange} />
+        <DialogTitle>New laptop</DialogTitle>
+          <LaptopDialogContent laptop={laptop} handleChange={handleChange} />
         <DialogActions>
-          <button onClick={handleClose}>Cancel</button>
-          <button onClick={handleSave}>Save</button>
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleSave}>Save</Button>
         </DialogActions>
       </Dialog>
     </>
