@@ -1,55 +1,28 @@
-// This code is part of a React component that fetches and displays a list of laptops.
-/*
- import { useQuery } from '@tanstack/react-query';
-import { LaptopResponse } from '../types';
-import axios from 'axios';
+// delete functionality with pop up message, add car functionality, edit car, exporting csv files
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getLaptops, deleteLaptop } from '../api/laptopapi';
+import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
+import Snackbar from '@mui/material/Snackbar';
+import AddLaptop from './AddLaptop';
+import EditLaptop from './EditLaptop';
 function LaptopList() 
 {
-    const getLaptops = async (): Promise<LaptopResponse[]> => 
-        {
-            const response = await axios.get("http://localhost:8080/api/laptops");
-            return response.data._embedded.laptops;
-        };
-    const { data, error, isSuccess } = useQuery({queryKey: ["laptops"], queryFn: getLaptops});
-    if (!isSuccess) 
-    {
-        return <span>Loading...</span>
-    }
-    else if (error) 
-    {
-        return <span>Error when fetching cars...</span>
-    }
-    else 
-    {
-        return (
-                <table>
-                <tbody>
-                    { 
-                        data.map((laptop: LaptopResponse) =>
-                        <tr key={laptop._links.self.href}>
-                        <td>{laptop.brand}</td>
-                        <td>{laptop.model}</td>
-                        <td>{laptop.color}</td>
-                        <td>{laptop.serialNumber}</td>
-                        <td>{laptop.modelYear}</td>
-                        <td>{laptop.price}</td>
-                        </tr>)
-                    }
-                </tbody>
-                </table>
-            );
-}
-}
-export default LaptopList;
-*/
-import { useQuery } from '@tanstack/react-query';
-import { getLaptops } from '../api/laptopapi';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-function LaptopList() 
-{
-  const { data, error, isSuccess } = useQuery({
+  const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const { data, isError, isLoading, isSuccess } = useQuery({
     queryKey: ["laptops"],
     queryFn: getLaptops
+  });
+
+  const { mutate } = useMutation(deleteLaptop, {
+    onSuccess: () => {
+      setOpen(true);
+      queryClient.invalidateQueries({ queryKey: ['laptops'] });
+    },
+    onError: (err) => {
+      console.error(err);
+    },
   });
 
   const columns: GridColDef[] = [
@@ -59,21 +32,60 @@ function LaptopList()
     { field: 'serialNumber', headerName: 'Serial Number', width: 150 },
     { field: 'modelYear', headerName: 'Model Year', width: 150 },
     { field: 'price', headerName: 'Price', width: 150 },
+    {
+      field: 'edit',
+      headerName: '',
+      width: 90,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      renderCell: (params: GridCellParams) =>
+        <EditLaptop laptopData={params.row} />
+    },
+    {
+
+      field: 'delete',
+      headerName: '',
+      width: 90,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      renderCell: (params: GridCellParams) => (
+      <button onClick={() => 
+       {
+          if (window.confirm(`Are you sure you want to delete ${params.row.brand} ${params.row.model}?`)) {
+            mutate(params.row._links.laptop.href);
+          }
+        }}>
+          Delete
+          </button>
+      ),
+    },
   ];
 
-  if (!isSuccess) {
-    return <span>Loading...</span>;
-  } else if (error) {
-    return <span>Error when fetching laptops...</span>;
-  } else {
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
+  else if (isError) {
+    return <span>Error when fetching laptops...</span>
+  }
+  else if (isSuccess) {
     return (
-      <div style={{ height: 600, width: '100%' }}>
+      <>
+        <AddLaptop />
         <DataGrid
           rows={data}
           columns={columns}
+          disableRowSelectionOnClick={true}
           getRowId={row => row._links.self.href}
+           showToolbar={true}
         />
-      </div>
+        <Snackbar
+          open={open}
+          autoHideDuration={2000}
+          onClose={() => setOpen(false)}
+          message="Laptop deleted" />
+      </>
     );
   }
 }
