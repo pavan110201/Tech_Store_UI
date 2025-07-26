@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Laptoplist from './components/Laptoplist';
+import Login from './components/Login';
 const queryClient = new QueryClient();
 function App() 
 {
@@ -19,7 +19,7 @@ function App()
             </Toolbar>
             </AppBar>
             <QueryClientProvider client={queryClient}>
-            <Laptoplist />
+            <Login /> 
             </QueryClientProvider>
             </Container>
           );

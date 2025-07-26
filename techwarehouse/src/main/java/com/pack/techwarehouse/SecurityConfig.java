@@ -91,7 +91,7 @@ public class SecurityConfig
     {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
-/*
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception 
     {
@@ -110,24 +110,12 @@ public class SecurityConfig
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN") // Role based acess, Admin able to delete the product 
                 .anyRequest().hasAnyRole("USER", "ADMIN") // Role based acess
-                */
                 /*
                 .anyRequest().authenticated() // For without role based access uncomment this and comment requestmatchers delete, Admin role
                 */
-            /*)
+            )
             .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(ex -> ex.authenticationEntryPoint(exceptionHandler));
-        return http.build();
-    }
-*/
-    // For frotend development i am enabling the access to every user
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .cors(withDefaults())
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-
         return http.build();
     }
     @Bean

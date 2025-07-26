@@ -3,24 +3,27 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getLaptops, deleteLaptop } from '../api/laptopapi';
 import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import Snackbar from '@mui/material/Snackbar';
-import AddLaptop from './AddLaptop';
-import EditLaptop from './EditLaptop';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-function LaptopList() {
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import AddLaptop from './AddLaptop';
+import EditLaptop from './EditLaptop';
+type LaptoplistProps = { logOut?: () => void;}
+function Laptoplist({ logOut }: LaptoplistProps) 
+{
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const { data, isError, isLoading, isSuccess } = useQuery({ queryKey: ["laptops"], queryFn: getLaptops});
-  const { mutate } = useMutation(deleteLaptop, {
-    onSuccess: () => { setOpen(true); queryClient.invalidateQueries({ queryKey: ['laptops'] });},
-    onError: (err) => { console.error(err);},});
+  const { mutate } = useMutation(deleteLaptop, { onSuccess: () => { setOpen(true);
+      queryClient.invalidateQueries({ queryKey: ['laptops'] });}, onError: (err) => { console.error(err);},}); 
   const columns: GridColDef[] = [
-    { field: 'brand', headerName: 'Brand', width: 200 },
-    { field: 'model', headerName: 'Model', width: 200 },
-    { field: 'color', headerName: 'Color', width: 200 },
-    { field: 'serialNumber', headerName: 'Serial Number', width: 150 },
-    { field: 'modelYear', headerName: 'Model Year', width: 150 },
-    { field: 'price', headerName: 'Price', width: 150 },
+    {field: 'brand', headerName: 'Brand', width: 200},
+    {field: 'model', headerName: 'Model', width: 200},
+    {field: 'color', headerName: 'Color', width: 200},
+    {field: 'serialNumber', headerName: 'Reg.nr.', width: 150},
+    {field: 'modelYear', headerName: 'Model Year', width: 150},
+    {field: 'price', headerName: 'Price', width: 150},
     {
       field: 'edit',
       headerName: '',
@@ -31,7 +34,7 @@ function LaptopList() {
       renderCell: (params: GridCellParams) =>
         <EditLaptop laptopData={params.row} />
     },
-     {
+    {
       field: 'delete',
       headerName: '',
       width: 90,
@@ -46,21 +49,27 @@ function LaptopList() {
             } 
           }}       
         >
-          <DeleteIcon fontSize="small" />
+        <DeleteIcon fontSize="small" />
         </IconButton>
       ),
-    }
-  ];
-  if (isLoading) {
+    },
+  ]; 
+  if (isLoading) 
+  {
     return <span>Loading...</span>
   }
-  else if (isError) {
+  else if (isError) 
+  {
     return <span>Error when fetching laptops...</span>
   }
-  else if (isSuccess) {
+   else if (isSuccess) 
+  {
     return (
       <>
-        <AddLaptop />
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <AddLaptop />
+          <Button onClick={logOut}>Log out</Button>
+        </Stack>
         <DataGrid
           rows={data}
           columns={columns}
@@ -73,8 +82,8 @@ function LaptopList() {
           autoHideDuration={2000}
           onClose={() => setOpen(false)}
           message="Laptop deleted" />
-      </>
+        </>
     );
   }
 }
-export default LaptopList;
+export default Laptoplist;
