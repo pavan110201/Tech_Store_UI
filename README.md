@@ -120,4 +120,14 @@ A full-stack enterprise-level web application with a Spring Boot backend and a R
 #  Access the frontend 
     -  http://localhost:3000
 
+## Author
+
+👤 **Pavan**
+
+- GitHub: [@pavan110201](https://github.com/pavan110201)
+  
+## License
+
+- This project is licensed under the [MIT License](LICENSE).
+
 
