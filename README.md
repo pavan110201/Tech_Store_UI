@@ -71,7 +71,7 @@ A full-stack enterprise-level web application with a Spring Boot backend and a R
 ### Docker Deployment
 - Build Docker Image for Database: docker run --name techdb -e MYSQL_ROOT_PASSWORD=your_pwd -e MYSQL_ DATABASE=techdb mariadb
 - Run the following command to build the Docker image: docker build -t techstorebackend
-- Run our Spring Boot container and link the MariaDB container: docker run -p 8080:8080 --name techapp --link techdb:mariadb -d  techwarehousebackend
+- Run our Spring Boot container and link the MariaDB container: docker run -p 8080:8080 --name techapp --link techdb:mariadb -d techstorebackend
 - For production, ensure your MariaDB container is running and update the application properties.yml.
 
 # Frontend Setup
