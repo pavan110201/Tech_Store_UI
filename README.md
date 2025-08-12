@@ -88,7 +88,7 @@ A full-stack enterprise-level web application with a Spring Boot backend and a R
    # Install dependencies
         - npm install
    # Install Additional Packages
-        -  npm install @mui/material @emotion/react @emotion/styled
+        - npm install @mui/material @emotion/react @emotion/styled
         - npm install axios @tanstack/react-query@4
         - npm install @mui/icons-material
         - npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
