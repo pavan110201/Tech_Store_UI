@@ -1,6 +1,6 @@
 # Enterprise Level Full-Stack Web Application
 
-A full-stack enterprise-level web application with a Spring Boot backend and a React TypeScript frontend. The backend is built using Java 17, Spring Framework 3.5, Gradle, and Docker. The frontend leverages React with MUI, Axios, React Query, and Vitest. This application features full CRUD operations, Swagger API documentation, robust testing, and containerized deployment.
+A full-stack enterprise-level web application with a Spring Boot backend and a React TypeScript frontend. The backend is built using Java 17, Spring Framework 3.5, Gradle, and Docker. The frontend leverages Vite, React with MUI, Axios, React Query, and Vitest. This application features full CRUD operations, Swagger API documentation, robust testing, and containerized deployment.
 
 
 
@@ -26,7 +26,7 @@ A full-stack enterprise-level web application with a Spring Boot backend and a R
 - **Networking:** Axios + React Query v4  
 - **Testing:** Vitest + React Testing Library  
 - **Icons:** MUI Icons  
-- **Dev Environment:** Vite, Visual Studio Code
+- **Dev Environment:** Vite 4.3, Visual Studio Code
 
 
 ##  Getting Started
